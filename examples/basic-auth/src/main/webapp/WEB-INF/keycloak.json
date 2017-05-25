@@ -1,0 +1,10 @@
+{
+  "realm" : "basic-auth",
+  "resource" : "basic-auth-service",
+  "auth-server-url": "/auth",
+  "ssl-required" : "external",
+  "enable-basic-auth" : "true",
+  "credentials": {
+      "secret": "password"
+  }
+}
