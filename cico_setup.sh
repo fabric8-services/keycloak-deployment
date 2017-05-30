@@ -48,7 +48,7 @@ function build() {
   echo 'CICO: Cloning keycloak source code repo'
   git clone https://github.com/almighty/keycloak.git --branch move_deployment_out
 
-  cd keycloak-source
+  cd keycloak
   # Set the version according to the ENV variable
   #mvn -q versions:set -DgenerateBackupPoms=false -DnewVersion=$KEYCLOAK_VERSION
   # Only build the keycloak-server to save time
