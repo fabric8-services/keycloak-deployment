@@ -11,9 +11,6 @@ ENV KEYCLOAK_VERSION 3.0.0.Final
 ARG OPERATING_MODE=standalone
 ENV OPERATING_MODE ${OPERATING_MODE}
 
-ENV OSO_ADDRESS tsrv.devshift.net:8443
-ENV OSO_DOMAIN_NAME tsrv.devshift.net
-
 USER root
 
 # Install little pcp pmcd server for metrics collection
@@ -32,9 +29,6 @@ ADD keycloak-$KEYCLOAK_VERSION.tar.gz /opt/jboss/
 RUN mv /opt/jboss/keycloak-$KEYCLOAK_VERSION $KEYCLOAK_HOME
 
 WORKDIR $KEYCLOAK_HOME
-
-ADD install_certificate.sh $KEYCLOAK_HOME
-RUN $KEYCLOAK_HOME/install_certificate.sh
 
 ADD standalone.xml $KEYCLOAK_HOME/standalone/configuration
 ADD standalone-ha.xml $KEYCLOAK_HOME/standalone/configuration

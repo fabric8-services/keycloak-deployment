@@ -17,11 +17,6 @@ US
 yes
 ANSWERS
 
-echo "Import certificate to keycloak store"
-keytool -importcert -trustcacerts -alias $OSO_DOMAIN_NAME-1 -keystore keycloak.jks -storepass ${KEYSTORE_PASSWORD} -file /opt/jboss/keycloak/InstallCert/$OSO_DOMAIN_NAME.cer << ANSWERS
-yes
-ANSWERS
-
 mv keycloak.jks ./standalone/configuration
 
 # Set the password of the keystore to the configuration file
