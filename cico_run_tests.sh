@@ -7,8 +7,10 @@ function run_tests() {
   git clone https://github.com/almighty/keycloak.git --branch master
   cd keycloak
 
-  echo 'CICO: Run mv clean install -pl :keycloak-server-dist -am -Pdistribution'
-  mvn clean install -pl :keycloak-server-dist -am -Pdistribution
+  # echo 'CICO: Run mv clean install -pl :keycloak-server-dist -am -Pdistribution'
+  # mvn clean install -pl :keycloak-server-dist -am -Pdistribution
+  echo 'CICO: Run mv clean install -am -Pdistribution'
+  mvn clean install -am -Pdistribution
 
   echo 'CICO: keycloak-server tests completed successfully!'
 }
