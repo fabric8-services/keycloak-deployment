@@ -46,7 +46,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone https://github.com/almighty/keycloak.git --branch move_deployment_out
+  git clone https://github.com/almighty/keycloak.git --branch master
 
   cd keycloak
   # Set the version according to the ENV variable
