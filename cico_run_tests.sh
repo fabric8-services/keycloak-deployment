@@ -9,8 +9,8 @@ function run_tests() {
 
   # echo 'CICO: Run mv clean install -pl :keycloak-server-dist -am -Pdistribution'
   # mvn clean install -pl :keycloak-server-dist -am -Pdistribution
-  echo 'CICO: Run mv clean install -am -Pdistribution'
-  mvn clean install -am -Pdistribution
+  echo 'CICO: Run mv clean install -Pdistribution'
+  mvn clean install -Pdistribution
 
   echo 'CICO: keycloak-server tests completed successfully!'
 }
