@@ -21,18 +21,6 @@ If you would like to build image for clustered mode add build argument
 
 `$ docker build  --build-arg OPERATING_MODE=clustered --tag IMAGE_NAME .`
 
-Note that, this docker image installs the certificate to securely talk to OpenShift Online.
-This step is done inside the `install_certificate.sh` script which adds this
-certificate into the Java system keystore at building time. We assume this certificate
-points to `tsrv.devshift.net`. So any change on that direction should trigger a
-change in the docker image.
-
-In the content of the Dockerfile, you could find this ENV variables:
-```
-ENV OSO_ADDRESS tsrv.devshift.net:8443
-ENV OSO_DOMAIN_NAME tsrv.devshift.net
-```
-
 # Openshift Configuration for clustered deployment
 
 Majority of the config is defined in `DeploymentConfig` files you can find in `openshift` folder in the root of this repository.
