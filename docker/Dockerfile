@@ -58,7 +58,7 @@ RUN cd $KEYCLOAK_HOME/modules/system/layers/base/org/postgresql/jdbc/main && \
   envsubst < $KEYCLOAK_HOME/modules/system/layers/base/org/postgresql/jdbc/main/module-postgres-jdbc.xml > $KEYCLOAK_HOME/modules/system/layers/base/org/postgresql/jdbc/main/module.xml && \
   rm $KEYCLOAK_HOME/modules/system/layers/base/org/postgresql/jdbc/main/module-postgres-jdbc.xml
 
-ENV JGROUPS_K8S_VERSION 0.9.2
+ENV JGROUPS_K8S_VERSION 0.9.3
 ENV OAUTH_VERSION 20090531
 
 RUN mkdir -p $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main
