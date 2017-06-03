@@ -49,6 +49,7 @@ objects:
             - '-b $(INTERNAL_POD_IP)'
             - '-Djgroups.bind_addr=global'
             - '-Djboss.node.name=$(INTERNAL_POD_IP)'
+            - '-Dinfinispan.stagger.delay=0'
           ports:
             - containerPort: 8080
               protocol: TCP
