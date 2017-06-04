@@ -27,6 +27,9 @@ objects:
   spec:
     strategy:
       type: Rolling
+      resources:
+        limits:
+          memory: 2Gi
     triggers:
     - type: ConfigChange
     test: false
@@ -137,7 +140,7 @@ objects:
             value: '47600'
           - name: JAVA_OPTS
             value: >-
-              -server -Xms256m -Xmx3584m -XX:MetaspaceSize=96M
+              -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
               -XX:+HeapDumpOnOutOfMemoryError
               -XX:HeapDumpPath=/opt/jboss/keycloak/heapdumppath
               -XX:+UseParallelGC
