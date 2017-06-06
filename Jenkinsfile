@@ -46,7 +46,6 @@ mavenTemplate{
                             echo 'fabric8: Image pushed, ready to update deployed app'
                         }
                     }
-                    
                     updateDownstreamDependencies(tag)
                 }
             }
@@ -61,5 +60,6 @@ def updateDownstreamDependencies(v) {
             'fabric8io/fabric8-platform'
     ]
     version = v
+    containerName = 'maven'
   }
 }
