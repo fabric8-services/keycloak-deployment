@@ -31,11 +31,11 @@ mavenTemplate{
 
                     def tag = getNewVersion{}
                     container('docker'){
-                        sh "cp keycloak/distribution/server-dist/target/keycloak-${keycloakVersion}.tar.gz docker"
+                        sh "cp distribution/server-dist/target/keycloak-${keycloakVersion}.tar.gz ../docker"
                         
-                        sh "docker build -t docker.io/fabric8/keycloak-postgres:${tag} -f ./docker/Dockerfile ./docker"
+                        sh "docker build -t docker.io/fabric8/keycloak-postgres:${tag} -f ../docker/Dockerfile ../docker"
 
-                        sh "rm docker/keycloak-${keycloakVersion}.tar.gz"
+                        sh "rm ../docker/keycloak-${keycloakVersion}.tar.gz"
 
                         sh "docker push docker.io/fabric8/keycloak-postgres:${tag}"
                         echo 'fabric8: Image pushed, ready to update deployed app'
