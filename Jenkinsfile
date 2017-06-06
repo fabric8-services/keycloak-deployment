@@ -17,29 +17,36 @@ mavenTemplate{
                     echo 'CI not provided by fabric8 yet'
 
                 } else if (utils.isCD()){
-                    git 'https://github.com/almighty/keycloak.git'
-                    container('maven'){
-                        echo 'fabric8: Run mv clean install -DskipTests=true -Pdistribution'
-                        sh 'mvn clean install -DskipTests=true -Pdistribution'
+                    stage('build keycloak'){
+                        sh 'git clone https://github.com/almighty/keycloak.git'
+                        dir('keycloak'){
+                            container('maven'){
+                                echo 'fabric8: Run mv clean install -DskipTests=true -Pdistribution'
+                                sh 'mvn clean install -DskipTests=true -Pdistribution'
 
-                        echo 'fabric8: Listing the directory server-dist'
-                        sh 'ls distribution/server-dist/'
-                        echo 'fabric8: Listing the directory target'
-                        sh 'ls distribution/server-dist/target'
-                        echo 'fabric8: keycloak-server build completed successfully!'
+                                echo 'fabric8: Listing the directory server-dist'
+                                sh 'ls distribution/server-dist/'
+                                echo 'fabric8: Listing the directory target'
+                                sh 'ls distribution/server-dist/target'
+                                echo 'fabric8: keycloak-server build completed successfully!'
+                            }
+                        }
                     }
 
                     def tag = getNewVersion{}
-                    container('docker'){
-                        sh "cp distribution/server-dist/target/keycloak-${keycloakVersion}.tar.gz ../docker"
-                        
-                        sh "docker build -t docker.io/fabric8/keycloak-postgres:${tag} -f ../docker/Dockerfile ../docker"
+                    stage('build and push image to dockerhub'){    
+                        container('docker'){
+                            sh "cp keycloak/distribution/server-dist/target/keycloak-${keycloakVersion}.tar.gz docker"
+                            
+                            sh "docker build -t docker.io/fabric8/keycloak-postgres:${tag} -f ./docker/Dockerfile ./docker"
 
-                        sh "rm ../docker/keycloak-${keycloakVersion}.tar.gz"
+                            sh "rm docker/keycloak-${keycloakVersion}.tar.gz"
 
-                        sh "docker push docker.io/fabric8/keycloak-postgres:${tag}"
-                        echo 'fabric8: Image pushed, ready to update deployed app'
+                            sh "docker push docker.io/fabric8/keycloak-postgres:${tag}"
+                            echo 'fabric8: Image pushed, ready to update deployed app'
+                        }
                     }
+                    
                     updateDownstreamDependencies(tag)
                 }
             }
