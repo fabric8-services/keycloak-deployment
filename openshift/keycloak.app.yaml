@@ -4,20 +4,6 @@ metadata:
   creationTimestamp: null
   name: keycloak
 objects:
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: keycloak-heap-dump
-    creationTimestamp: null
-    labels:
-      app: keycloak
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 4Gi
-  status: {}
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
@@ -60,9 +46,6 @@ objects:
             - containerPort: 57600
               protocol: TCP
           imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: "/opt/jboss/keycloak/heapdumppath"
-              name: heapdumps
           resources: {}
           livenessProbe:
             httpGet:
@@ -142,7 +125,6 @@ objects:
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
               -XX:+HeapDumpOnOutOfMemoryError
-              -XX:HeapDumpPath=/opt/jboss/keycloak/heapdumppath
               -XX:+UseParallelGC
               -XX:MinHeapFreeRatio=20
               -XX:MaxHeapFreeRatio=40
@@ -159,10 +141,6 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirst
-        volumes:
-          - name: heapdumps
-            persistentVolumeClaim:
-              claimName: keycloak-heap-dump
   status: {}
 - kind: Service
   apiVersion: v1
