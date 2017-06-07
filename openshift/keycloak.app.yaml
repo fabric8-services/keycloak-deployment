@@ -66,24 +66,24 @@ objects:
           resources: {}
           livenessProbe:
             httpGet:
-              path: /auth/version
+              path: /auth/realms/fabric8
               port: 8080
               scheme: HTTP
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 5
             timeoutSeconds: 10
-            periodSeconds: 10
-            initialDelaySeconds: 60
+            periodSeconds: 5
+            initialDelaySeconds: 120
           readinessProbe:
             httpGet:
               path: /auth/realms/fabric8
               port: 8080
               scheme: HTTP
             successThreshold: 1
-            failureThreshold: 3
-            timeoutSeconds: 10
-            periodSeconds: 20
-            initialDelaySeconds: 60
+            failureThreshold: 10
+            timeoutSeconds: 5
+            periodSeconds: 5
+            initialDelaySeconds: 30
           terminationMessagePath: /dev/termination-log
           env:
           - name: INTERNAL_POD_IP
