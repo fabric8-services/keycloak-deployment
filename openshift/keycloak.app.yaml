@@ -71,9 +71,9 @@ objects:
               scheme: HTTP
             successThreshold: 1
             failureThreshold: 3
-            timeoutSeconds: 60
-            periodSeconds: 20
-            initialDelaySeconds: 300
+            timeoutSeconds: 10
+            periodSeconds: 10
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /auth/realms/fabric8
@@ -81,9 +81,9 @@ objects:
               scheme: HTTP
             successThreshold: 1
             failureThreshold: 3
-            timeoutSeconds: 60
+            timeoutSeconds: 10
             periodSeconds: 20
-            initialDelaySeconds: 300
+            initialDelaySeconds: 60
           terminationMessagePath: /dev/termination-log
           env:
           - name: INTERNAL_POD_IP
