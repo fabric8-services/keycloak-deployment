@@ -24,3 +24,12 @@ objects:
     password: a2V5Y2xvYWs=
     database: a2V5Y2xvYWs=
     admin.password: cGFzc3dvcmQ=
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: keycloak-config
+  type: Opaque
+  data:
+    openshift.kube.ping.labels: "name=keycloak-server"
+    openshift.kube.ping.server.port: "47600"
+    operating.mode: "clustered"

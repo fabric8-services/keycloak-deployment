@@ -118,9 +118,20 @@ objects:
               fieldRef:
                 fieldPath: metadata.namespace
           - name: OPENSHIFT_KUBE_PING_LABELS
-            value: 'name=keycloak-server'
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-config
+                key: openshift.kube.ping.labels
           - name: OPENSHIFT_KUBE_PING_SERVER_PORT
-            value: '47600'
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-config
+                key: openshift.kube.ping.server.port
+          - name: OPERATING_MODE
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-config
+                key: operating.mode
           - name: JAVA_OPTS
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
@@ -135,8 +146,6 @@ objects:
               -Djava.net.preferIPv4Stack=true
               -Djboss.modules.system.pkgs=org.jboss.byteman
               -Djava.awt.headless=true
-          - name: OPERATING_MODE
-            value: clustered
         restartPolicy: Always
         securityContext: {}
         terminationGracePeriodSeconds: 30
