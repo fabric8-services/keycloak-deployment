@@ -119,17 +119,17 @@ objects:
                 fieldPath: metadata.namespace
           - name: OPENSHIFT_KUBE_PING_LABELS
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: keycloak-config
                 key: openshift.kube.ping.labels
           - name: OPENSHIFT_KUBE_PING_SERVER_PORT
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: keycloak-config
                 key: openshift.kube.ping.server.port
           - name: OPERATING_MODE
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: keycloak-config
                 key: operating.mode
           - name: JAVA_OPTS
