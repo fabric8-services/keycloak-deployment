@@ -5,7 +5,7 @@ set -x
 # Exit on error
 set -e
 
-REPO_NAME="almighty"
+REPO_NAME="fabric8-services"
 CURRENT_DIR=$(pwd)
 PROJECT_NAME="keycloak"
 DOCKER_IMAGE_CORE=$PROJECT_NAME
@@ -46,7 +46,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone https://github.com/almighty/keycloak.git --branch master
+  git clone https://github.com/fabric8-services/keycloak.git --branch master
 
   cd keycloak
   # Set the version according to the ENV variable

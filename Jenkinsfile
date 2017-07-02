@@ -18,7 +18,7 @@ mavenTemplate{
 
                 } else if (utils.isCD()){
                     stage('build keycloak'){
-                        sh 'git clone https://github.com/almighty/keycloak.git'
+                        sh 'git clone https://github.com/fabric8-services/keycloak.git'
                         dir('keycloak'){
                             container('maven'){
                                 echo 'fabric8: Run mv clean install -DskipTests=true -Pdistribution'
@@ -34,10 +34,10 @@ mavenTemplate{
                     }
 
                     def tag = getNewVersion{}
-                    stage('build and push image to dockerhub'){    
+                    stage('build and push image to dockerhub'){
                         container('docker'){
                             sh "cp keycloak/distribution/server-dist/target/keycloak-${keycloakVersion}.tar.gz docker"
-                            
+
                             sh "docker build -t docker.io/fabric8/keycloak-postgres:${tag} -f ./docker/Dockerfile ./docker"
 
                             sh "rm docker/keycloak-${keycloakVersion}.tar.gz"

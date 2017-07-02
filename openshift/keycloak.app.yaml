@@ -30,7 +30,7 @@ objects:
       spec:
         containers:
         - name: keycloak-server
-          image: registry.devshift.net/almighty/keycloak-postgres:${IMAGE_TAG}
+          image: registry.devshift.net/fabric8-services/keycloak-postgres:${IMAGE_TAG}
           args:
             - '-b $(INTERNAL_POD_IP)'
             - '-Djgroups.bind_addr=global'

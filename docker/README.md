@@ -1,6 +1,6 @@
 
 
-# Almighty-Keycloak Docker Image
+# Fabric8-Services Keycloak Docker Image
 
 To build this image is necessary to previously generate the executables of this
 project.
@@ -25,10 +25,9 @@ If you would like to build image for clustered mode add build argument
 
 Majority of the config is defined in `DeploymentConfig` files you can find in `openshift` folder in the root of this repository.
 
-There is one thing needed however to have properly functioning cluster (using [k8s PING protocol in `jgroups`](https://github.com/jgroups-extras/jgroups-kubernetes)). 
+There is one thing needed however to have properly functioning cluster (using [k8s PING protocol in `jgroups`](https://github.com/jgroups-extras/jgroups-kubernetes)).
 Service account has to have `view` privileges. This can be enabled using `oc` cli as follows:
 
 ```
 $ oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
 ```
-
