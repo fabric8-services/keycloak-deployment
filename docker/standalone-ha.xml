@@ -221,18 +221,10 @@
                 <local-cache name="users">
                     <eviction max-entries="10000" strategy="LIRS"/>
                 </local-cache>
-                <distributed-cache name="sessions" mode="SYNC" owners="2">
-                  <partition-handling enabled="true"/>
-                </distributed-cache>
-                <distributed-cache name="authenticationSessions" mode="SYNC" owners="2">
-                  <partition-handling enabled="true"/>
-                </distributed-cache>
-                <distributed-cache name="offlineSessions" mode="SYNC" owners="2">
-                  <partition-handling enabled="true"/>
-                </distributed-cache>
-                <distributed-cache name="loginFailures" mode="SYNC" owners="2">
-                  <partition-handling enabled="true"/>
-                </distributed-cache>
+                <distributed-cache name="sessions" mode="SYNC" owners="1"/>
+                <distributed-cache name="authenticationSessions" mode="SYNC" owners="1"/>
+                <distributed-cache name="offlineSessions" mode="SYNC" owners="1"/>
+                <distributed-cache name="loginFailures" mode="SYNC" owners="1"/>
                 <local-cache name="authorization">
                     <eviction max-entries="10000" strategy="LIRS"/>
                 </local-cache>

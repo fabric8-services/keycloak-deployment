@@ -155,8 +155,11 @@ objects:
   apiVersion: v1
   metadata:
     name: keycloak-server
+    creationTimestamp: null
     labels:
       name: keycloak-server
+    annotations:
+      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-postgresql","namespace":"","kind":"Service"}]'
   spec:
     ports:
     - port: 8080
@@ -171,6 +174,7 @@ objects:
 - kind: Route
   apiVersion: v1
   metadata:
+    creationTimestamp: null
     name: keycloak
   spec:
     host: ''
