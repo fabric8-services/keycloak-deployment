@@ -81,7 +81,7 @@ function deploy() {
 
   rm docker/keycloak-$KEYCLOAK_VERSION.tar.gz
 
-  TAG=$(echo $GIT_COMMIT | cut -c1-6)
+  TAG=$(echo $GIT_COMMIT | cut -c1-7)
 
   tag_push registry.devshift.net/$REPO_NAME/$PROJECT_NAME-postgres:$TAG
   tag_push registry.devshift.net/$REPO_NAME/$PROJECT_NAME-postgres:latest
