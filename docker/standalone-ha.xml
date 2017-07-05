@@ -101,6 +101,9 @@
             <logger category="org.jboss.as.config">
                 <level name="DEBUG"/>
             </logger>
+            <logger category="org.jgroups">
+                <level name="DEBUG"/>
+            </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
@@ -221,10 +224,18 @@
                 <local-cache name="users">
                     <eviction max-entries="10000" strategy="LIRS"/>
                 </local-cache>
-                <distributed-cache name="sessions" mode="SYNC" owners="1"/>
-                <distributed-cache name="authenticationSessions" mode="SYNC" owners="1"/>
-                <distributed-cache name="offlineSessions" mode="SYNC" owners="1"/>
-                <distributed-cache name="loginFailures" mode="SYNC" owners="1"/>
+                <distributed-cache name="sessions" mode="SYNC" owners="2">
+                  <partition-handling enabled="true"/>
+                </distributed-cache>
+                <distributed-cache name="authenticationSessions" mode="SYNC" owners="2">
+                  <partition-handling enabled="true"/>
+                </distributed-cache>
+                <distributed-cache name="offlineSessions" mode="SYNC" owners="2">
+                  <partition-handling enabled="true"/>
+                </distributed-cache>
+                <distributed-cache name="loginFailures" mode="SYNC" owners="2">
+                  <partition-handling enabled="true"/>
+                </distributed-cache>
                 <local-cache name="authorization">
                     <eviction max-entries="10000" strategy="LIRS"/>
                 </local-cache>
@@ -310,7 +321,16 @@
                     <protocol type="FD_SOCK" socket-binding="jgroups-tcp-fd">
                       <property name="external_addr">${env.INTERNAL_POD_IP}</property>
                     </protocol>
-                    <protocol type="FD_ALL" />
+                    <protocol type="FD_ALL">
+                        <!-- The timeout after which we suspect P -->
+                        <!-- Needs to be much larger than GC -->
+                        <!-- Let's use 10 * 0.8s (GC) = 8s -->
+                        <property name="timeout">8000</property>
+                        <!-- How often we check heartbeat messages -->
+                        <property name="timeout_check_interval">2000</property>
+                        <!-- How often we send out heartbeats -->
+                        <property name="interval">3000</property>
+                    </protocol>
                     <protocol type="VERIFY_SUSPECT"/>
                     <protocol type="pbcast.NAKACK2">
                         <property name="use_mcast_xmit">false</property>
