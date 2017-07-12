@@ -47,11 +47,11 @@
                     <properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
                 <!-- Added by openshift.io keycloak team -->
-                 <server-identities>
-                     <ssl>
-                         <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="%%KEYSTORE_PASSWORD%%" />
-                     </ssl>
-                 </server-identities>
+                <server-identities>
+                    <ssl>
+                        <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="%%KEYSTORE_PASSWORD%%" />
+                    </ssl>
+                </server-identities>
                 <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
             </security-realm>
         </security-realms>
@@ -158,9 +158,9 @@
             </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
-        <!-- Added and modified by openshift.io keycloak team. We set to scan-interval=0 to allow scanning on startup -->
-        <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="0" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
-        <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
+            <!-- Added and modified by openshift.io keycloak team. We set to scan-interval=0 to allow scanning on startup -->
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="0" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
+            <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:4.0">
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
@@ -213,7 +213,7 @@
                     <option name="READ_TIMEOUT" value="${prop.remoting-connector.read.timeout:20}" type="xnio"/>
                     <option name="MAX_OUTBOUND_MESSAGES" value="1234" type="remoting"/>
                 </channel-creation-options>
-            </remote> 
+            </remote>
             <thread-pools>
                 <thread-pool name="default">
                     <max-threads count="10"/>
@@ -356,7 +356,6 @@
                 </stack>
             </stacks>
             <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
-
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jmx:1.3">
             <expose-resolved-model/>

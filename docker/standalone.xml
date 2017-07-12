@@ -247,8 +247,8 @@
                     <expiration max-idle="3600000"/>
                 </local-cache>
                 <local-cache name="actionTokens">
-                    <eviction max-entries="-1" strategy="NONE"/>
-                    <expiration max-idle="-1" interval="300000"/>
+                   <eviction max-entries="-1" strategy="NONE"/>
+                   <expiration max-idle="-1" interval="300000"/>
                 </local-cache>
             </cache-container>
             <cache-container name="server" default-cache="default" module="org.wildfly.clustering.server">
@@ -391,8 +391,8 @@
             <server name="default-server">
                 <!-- proxy-address-forwarding="true" added and redirect-socket="proxy-https" changed by openshift.io keycloak team -->
                 <http-listener name="default" socket-binding="http" redirect-socket="proxy-https" proxy-address-forwarding="true"/>
-                <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->   
-                 <host name="default-host" alias="localhost">
+                <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   --> 
+                <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <filter-ref name="server-header"/>
                     <filter-ref name="x-powered-by-header"/>
