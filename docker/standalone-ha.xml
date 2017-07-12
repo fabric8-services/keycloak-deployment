@@ -46,6 +46,13 @@
                 <authorization>
                     <properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
+                <!-- Added by openshift.io keycloak team -->
+                 <server-identities>
+                     <ssl>
+                         <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="%%KEYSTORE_PASSWORD%%" />
+                     </ssl>
+                 </server-identities>
+                <!--   xxxxxxxxxxxxxxxxxxxxxxxxx   -->
             </security-realm>
         </security-realms>
         <audit-log>
