@@ -99,6 +99,9 @@
             <logger category="org.jboss.as.config">
                 <level name="DEBUG"/>
             </logger>
+             <logger category="org.jgroups">
+                <level name="DEBUG"/>
+            </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
