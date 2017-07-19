@@ -46,7 +46,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone https://github.com/fabric8-services/keycloak.git --branch master
+  git clone -b 3.2.0.Final  --depth 1 https://github.com/fabric8-services/keycloak.git
 
   cd keycloak
   # Set the version according to the ENV variable
