@@ -11,7 +11,7 @@ PROJECT_NAME="keycloak"
 DOCKER_IMAGE_CORE=$PROJECT_NAME
 DOCKER_IMAGE_DEPLOY=$PROJECT_NAME-deploy
 
-KEYCLOAK_VERSION="3.2.0.CR1-SNAPSHOT"
+KEYCLOAK_VERSION="3.2.0.Final"
 
 # Source environment variables of the jenkins slave
 # that might interest this worker.
@@ -46,7 +46,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone https://github.com/fabric8-services/keycloak.git --branch master
+  git clone -b $KEYCLOAK_VERSION  --depth 1 https://github.com/fabric8-services/keycloak.git
 
   cd keycloak
   # Set the version according to the ENV variable
