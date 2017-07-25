@@ -132,6 +132,8 @@ objects:
               configMapKeyRef:
                 name: keycloak-config
                 key: operating.mode
+          - name: MANUAL_MIGRATION
+            value: "yes"
           - name: JAVA_OPTS
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
