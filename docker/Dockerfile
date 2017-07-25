@@ -25,6 +25,11 @@ EXPOSE 44321
 
 ENV KEYCLOAK_HOME /opt/jboss/keycloak
 
+### TO BE REMOVED: Temporal installation of psql client to run some db migration scripts  ######
+RUN yum install -y postgresql-server.x86_64
+#################################################################################################
+
+
 ADD keycloak-$KEYCLOAK_VERSION.tar.gz /opt/jboss/
 RUN mv /opt/jboss/keycloak-$KEYCLOAK_VERSION $KEYCLOAK_HOME
 
@@ -71,6 +76,12 @@ RUN cd $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernet
  envsubst < $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module-jgroups-k8s.xml > $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module.xml && \
  rm $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module-jgroups-k8s.xml && \
  sed -ie 's@\(</dependencies>\)@    <module name="org.jgroups.kubernetes.kubernetes"/>\n    \1@' /opt/jboss/keycloak/modules/system/layers/base/org/jgroups/main/module.xml
+
+
+ ### TO BE REMOVED: Temporal installation of psql client to run some db migration scripts  ######
+ COPY db_migration/3.2.0-CR1-SNAPSHOT_to_3.2.0.Final/keycloak-database-pre-update.sql $KEYCLOAK_HOME/
+ COPY db_migration/3.2.0-CR1-SNAPSHOT_to_3.2.0.Final/keycloak-database-post-update.sql $KEYCLOAK_HOME/
+ #################################################################################################
 
 EXPOSE 8080
 ENTRYPOINT [ "/keycloak+pmcd.sh" ]

@@ -28,12 +28,25 @@ if [ $KEYCLOAK_USER ] && [ $KEYCLOAK_PASSWORD ]; then
     /opt/jboss/keycloak/bin/add-user-keycloak.sh --user $KEYCLOAK_USER --password $KEYCLOAK_PASSWORD
 fi
 
+if [[ "${MANUAL_MIGRATION}" == "yes" ]]; then
+  export PGPASSWORD=${POSTGRESQL_ADMIN_PASSWORD}
+  echo "Running manual db migration..."
+  exec psql -U $POSTGRES_USER -h $POSTGRES_PORT_5432_TCP_ADDR -d $POSTGRES_DATABASE -a -q -f /opt/jboss/keycloak/keycloak-database-pre-update.sql
+fi
+
 
 if [[ "${OPERATING_MODE}" == "clustered" ]]; then
   echo "Starting keycloak-server on clustered mode..."
   exec /opt/jboss/keycloak/bin/standalone.sh --server-config=standalone-ha.xml -bmanagement=$INTERNAL_POD_IP -bprivate=$INTERNAL_POD_IP $@
 else
-  echo "Starting keycloak-server on standalone mode..."
-  exec /opt/jboss/keycloak/bin/standalone.sh $@
+  if [[ "${MANUAL_MIGRATION}" == "yes" ]]; then
+    echo "Starting keycloak-server on standalone mode and migration post update script..."
+    export PGPASSWORD=${POSTGRESQL_ADMIN_PASSWORD}
+    # Run the server in parallel and wait 3minutes to run the script of post update
+    (exec /opt/jboss/keycloak/bin/standalone.sh $@) & (sleep 180; exec psql -U $POSTGRES_USER -h $POSTGRES_PORT_5432_TCP_ADDR -d $POSTGRES_DATABASE -a -q -f /opt/jboss/keycloak/keycloak-database-post-update.sql)
+  else
+    echo "Starting keycloak-server on standalone mode..."
+    exec /opt/jboss/keycloak/bin/standalone.sh $@
+  fi
 fi
 exit $?
