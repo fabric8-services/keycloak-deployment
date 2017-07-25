@@ -31,7 +31,7 @@ fi
 if [[ "${MANUAL_MIGRATION}" == "yes" ]]; then
   export PGPASSWORD=${POSTGRESQL_ADMIN_PASSWORD}
   echo "Running manual db migration..."
-  exec psql -U $POSTGRES_USER -h $POSTGRES_PORT_5432_TCP_ADDR -d $POSTGRES_DATABASE -a -q -f /opt/jboss/keycloak/keycloak-database-pre-update.sql
+  psql -U $POSTGRES_USER -h $POSTGRES_PORT_5432_TCP_ADDR -d $POSTGRES_DATABASE -a -q -f /opt/jboss/keycloak/keycloak-database-pre-update.sql
 fi
 
 
