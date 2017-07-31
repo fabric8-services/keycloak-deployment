@@ -54,6 +54,10 @@
                     "protocol":"TCP"
                   },
                   {
+                    "containerPort":47600,
+                    "protocol":"TCP"
+                  },
+                  {
                     "containerPort":57600,
                     "protocol":"TCP"
                   }
@@ -61,7 +65,8 @@
                 "args": [
                   "-b $(INTERNAL_POD_IP)",
                   "-Djgroups.bind_addr=global",
-                  "-Djboss.node.name=$(INTERNAL_POD_IP)"
+                  "-Djboss.node.name=$(INTERNAL_POD_IP)",
+                  "-Dinfinispan.stagger.delay=0"
                 ],
                 "env":[
                   {
@@ -99,6 +104,22 @@
                   {
                     "name":"POSTGRES_PORT_5432_TCP_PORT",
                     "value":"5432"
+                  },
+                  {
+                    "name":"OPENSHIFT_KUBE_PING_LABELS",
+                    "value": "name=keycloak-server"
+                  },
+                  {
+                    "name": "OPENSHIFT_KUBE_PING_NAMESPACE",
+                    "valueFrom": {
+                       "fieldRef": {
+                          "fieldPath": "metadata.namespace"
+                       }
+                    }
+                  },
+                  {
+                    "name": "OPENSHIFT_KUBE_PING_SERVER_PORT",
+                    "value": "47600"
                   },
                   {
                     "name":"OPERATING_MODE",
