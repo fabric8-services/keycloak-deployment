@@ -72,6 +72,7 @@ RUN cd $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernet
  rm $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module-jgroups-k8s.xml && \
  sed -ie 's@\(</dependencies>\)@    <module name="org.jgroups.kubernetes.kubernetes"/>\n    \1@' /opt/jboss/keycloak/modules/system/layers/base/org/jgroups/main/module.xml
 
+
 EXPOSE 8080
 ENTRYPOINT [ "/keycloak+pmcd.sh" ]
 

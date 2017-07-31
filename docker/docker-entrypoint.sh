@@ -35,5 +35,6 @@ if [[ "${OPERATING_MODE}" == "clustered" ]]; then
 else
   echo "Starting keycloak-server on standalone mode..."
   exec /opt/jboss/keycloak/bin/standalone.sh $@
+  #fi
 fi
 exit $?
