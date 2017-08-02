@@ -128,10 +128,7 @@ objects:
                 name: keycloak-config
                 key: openshift.kube.ping.server.port
           - name: OPERATING_MODE
-            valueFrom:
-              configMapKeyRef:
-                name: keycloak-config
-                key: operating.mode
+            value: "clustered"
           - name: JAVA_OPTS
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M

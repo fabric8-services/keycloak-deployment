@@ -32,4 +32,3 @@ objects:
   data:
     openshift.kube.ping.labels: "name=keycloak-server"
     openshift.kube.ping.server.port: "47600"
-    operating.mode: "clustered"
