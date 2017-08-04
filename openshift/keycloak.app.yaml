@@ -19,7 +19,7 @@ objects:
     triggers:
     - type: ConfigChange
     test: false
-    replicas: 3
+    replicas: ${REPLICAS}
     selector:
       name: keycloak-server
     template:
@@ -128,7 +128,7 @@ objects:
                 name: keycloak-config
                 key: openshift.kube.ping.server.port
           - name: OPERATING_MODE
-            value: "clustered"
+            value: ${OPERATING_MODE}
           - name: JAVA_OPTS
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
@@ -181,3 +181,7 @@ objects:
 parameters:
 - name: IMAGE_TAG
   value: latest
+- name: OPERATING_MODE
+  value: clustered
+- name: REPLICAS
+  value: "3"
