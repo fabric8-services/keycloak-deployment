@@ -184,4 +184,4 @@ parameters:
 - name: OPERATING_MODE
   value: clustered
 - name: REPLICAS
-  value: 3
+  value: "3"
