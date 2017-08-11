@@ -86,7 +86,7 @@ Of course you would need to specify the mode as CLUSTERED or STANDALONE
 
 ### Testing the performance of a deployment
 
-The performance can be testing by executing the following scripts :
+The performance can be tested by executing the following scripts :
 https://github.com/fabric8-services/keycloak-performance-scripts
 
 
