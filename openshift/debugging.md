@@ -77,12 +77,12 @@ and then
                 
 ```
 
-Of course you would need to specify the mode
+Of course you would need to specify the mode as CLUSTERED or STANDALONE
 
 ```
 - name: OPERATING_MODE
   value: ${OPERATING_MODE}
-
+```
 
 ### Testing the performance of a deployment
 
