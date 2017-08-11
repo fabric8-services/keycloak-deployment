@@ -19,7 +19,7 @@ objects:
     triggers:
     - type: ConfigChange
     test: false
-    replicas: 3
+    replicas: ${REPLICAS}
     selector:
       name: keycloak-server
     template:
@@ -128,10 +128,7 @@ objects:
                 name: keycloak-config
                 key: openshift.kube.ping.server.port
           - name: OPERATING_MODE
-            valueFrom:
-              configMapKeyRef:
-                name: keycloak-config
-                key: operating.mode
+            value: ${OPERATING_MODE}
           - name: JAVA_OPTS
             value: >-
               -server -Xms256m -Xmx1434m -XX:MetaspaceSize=96M
@@ -146,6 +143,7 @@ objects:
               -Djava.net.preferIPv4Stack=true
               -Djboss.modules.system.pkgs=org.jboss.byteman
               -Djava.awt.headless=true
+              -XX:+PrintGC
         restartPolicy: Always
         securityContext: {}
         terminationGracePeriodSeconds: 30
@@ -155,11 +153,8 @@ objects:
   apiVersion: v1
   metadata:
     name: keycloak-server
-    creationTimestamp: null
     labels:
       name: keycloak-server
-    annotations:
-      service.alpha.openshift.io/dependencies: '[{"name":"keycloak-postgresql","namespace":"","kind":"Service"}]'
   spec:
     ports:
     - port: 8080
@@ -174,7 +169,6 @@ objects:
 - kind: Route
   apiVersion: v1
   metadata:
-    creationTimestamp: null
     name: keycloak
   spec:
     host: ''
@@ -187,3 +181,7 @@ objects:
 parameters:
 - name: IMAGE_TAG
   value: latest
+- name: OPERATING_MODE
+  value: clustered
+- name: REPLICAS
+  value: "3"

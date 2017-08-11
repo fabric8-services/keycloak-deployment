@@ -29,11 +29,11 @@ if [ $KEYCLOAK_USER ] && [ $KEYCLOAK_PASSWORD ]; then
 fi
 
 
-if [[ "${OPERATING_MODE}" == "clustered" ]]; then
-  echo "Starting keycloak-server on clustered mode..."
-  exec /opt/jboss/keycloak/bin/standalone.sh --server-config=standalone-ha.xml -bmanagement=$INTERNAL_POD_IP -bprivate=$INTERNAL_POD_IP $@
-else
+if [[ "${OPERATING_MODE}" != "clustered" ]]; then
   echo "Starting keycloak-server on standalone mode..."
   exec /opt/jboss/keycloak/bin/standalone.sh $@
+else
+  echo "Starting keycloak-server on clustered mode..."
+  exec /opt/jboss/keycloak/bin/standalone.sh --server-config=standalone-ha.xml -bmanagement=$INTERNAL_POD_IP -bprivate=$INTERNAL_POD_IP $@
 fi
 exit $?

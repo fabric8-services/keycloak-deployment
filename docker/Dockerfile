@@ -5,10 +5,10 @@ MAINTAINER Hector Fernandez <hfernand@redhat.com>
 # ensuring clean shutdown when container is stopped.
 ENV LAUNCH_JBOSS_IN_BACKGROUND 1
 
-ENV KEYCLOAK_VERSION 3.2.0.CR1-SNAPSHOT
+ENV KEYCLOAK_VERSION 3.2.0.Final
 
 # This can be specified as build argument, e.g. docker build  --build-arg OPERATING_MODE=clustered --tag IMAGE_NAME .
-ARG OPERATING_MODE=standalone
+ARG OPERATING_MODE=clustered
 ENV OPERATING_MODE ${OPERATING_MODE}
 
 USER root
@@ -71,6 +71,7 @@ RUN cd $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernet
  envsubst < $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module-jgroups-k8s.xml > $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module.xml && \
  rm $KEYCLOAK_HOME/modules/system/layers/base/org/jgroups/kubernetes/kubernetes/main/module-jgroups-k8s.xml && \
  sed -ie 's@\(</dependencies>\)@    <module name="org.jgroups.kubernetes.kubernetes"/>\n    \1@' /opt/jboss/keycloak/modules/system/layers/base/org/jgroups/main/module.xml
+
 
 EXPOSE 8080
 ENTRYPOINT [ "/keycloak+pmcd.sh" ]
