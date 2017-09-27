@@ -57,7 +57,7 @@ def updateDownstreamDependencies(v) {
   pushPomPropertyChangePR {
     propertyName = 'keycloak.version'
     projects = [
-            'fabric8io/fabric8-platform'
+            'fabric8-apps/keycloak-app'
     ]
     version = v
     containerName = 'maven'
