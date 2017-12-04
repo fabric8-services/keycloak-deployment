@@ -1,6 +1,7 @@
 @Library('github.com/fabric8io/fabric8-pipeline-library@master')
 def utils = new io.fabric8.Utils()
 def keycloakVersion = '3.2.0.Final'
+def branchName = '3.2.0.Final-patch'
 
 node{
     properties([
@@ -18,7 +19,7 @@ mavenTemplate{
 
                 } else if (utils.isCD()){
                     stage('build keycloak'){
-                        sh 'git clone https://github.com/fabric8-services/keycloak.git'
+                        sh "git clone -b ${branchName}  --depth 1 https://github.com/fabric8-services/keycloak.git"
                         dir('keycloak'){
                             container('maven'){
                                 echo 'fabric8: Run mv clean install -DskipTests=true -Pdistribution'
