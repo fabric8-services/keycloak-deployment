@@ -166,18 +166,6 @@ objects:
     sessionAffinity: None
   status:
     loadBalancer: {}
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: keycloak
-  spec:
-    host: ''
-    to:
-      kind: Service
-      name: keycloak-server
-      weight: 100
-      insecureEdgeTerminationPolicy: Allow
-    wildcardPolicy: None
 parameters:
 - name: IMAGE_TAG
   value: latest
