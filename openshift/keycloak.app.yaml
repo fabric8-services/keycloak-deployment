@@ -13,9 +13,6 @@ objects:
   spec:
     strategy:
       type: Rolling
-      resources:
-        limits:
-          memory: 2Gi
     triggers:
     - type: ConfigChange
     test: false
@@ -67,6 +64,9 @@ objects:
             timeoutSeconds: 5
             periodSeconds: 5
             initialDelaySeconds: 30
+          resources:
+            limits:
+              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           env:
           - name: INTERNAL_POD_IP
