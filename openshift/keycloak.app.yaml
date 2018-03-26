@@ -65,7 +65,11 @@ objects:
             periodSeconds: 5
             initialDelaySeconds: 30
           resources:
+            requests:
+              cpu: 5m
+              memory: 640Mi
             limits:
+              cpu: 400m
               memory: 2Gi
           terminationMessagePath: /dev/termination-log
           env:
