@@ -28,7 +28,7 @@ function load_jenkins_vars() {
 
 function install_deps() {
   # We need to disable selinux for now, XXX
-  /usr/sbin/setenforce 0
+  /usr/sbin/setenforce 0 || :
 
   # Get all the deps in
   yum -y install \
@@ -47,7 +47,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone -b $BRANCH_NAME  --depth 1 https://github.com/fabric8-services/keycloak.git
+  [ ! -d keycloak ] && git clone -b $BRANCH_NAME  --depth 1 https://github.com/fabric8-services/keycloak.git
 
   cd keycloak
   # Set the version according to the ENV variable
@@ -69,18 +69,13 @@ function build() {
 }
 
 function tag_push() {
-  TARGET=$1
-  docker tag $DOCKER_IMAGE_DEPLOY $TARGET
-  docker push $TARGET
+  local tag=$1
+  docker tag $DOCKER_IMAGE_DEPLOY $tag
+  docker push $tag
 }
 
 function deploy() {
   cp keycloak/distribution/server-dist/target/keycloak-$KEYCLOAK_VERSION.tar.gz docker
-
-  # Let's deploy
-  docker build -t $DOCKER_IMAGE_DEPLOY -f $CURRENT_DIR/docker/Dockerfile $CURRENT_DIR/docker
-
-  rm docker/keycloak-$KEYCLOAK_VERSION.tar.gz
 
   TAG=$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
   REGISTRY="push.registry.devshift.net"
@@ -91,8 +86,24 @@ function deploy() {
     echo "Could not login, missing credentials for the registry"
   fi
 
-  tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:$TAG
-  tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:latest
+  if [ "$TARGET" = "rhel" ]; then
+    DOCKERFILE="Dockerfile.rhel"
+  else
+    DOCKERFILE="Dockerfile"
+  fi
+
+  # Let's deploy
+  docker build -t $DOCKER_IMAGE_DEPLOY -f $CURRENT_DIR/docker/${DOCKERFILE} $CURRENT_DIR/docker
+
+  rm docker/keycloak-$KEYCLOAK_VERSION.tar.gz
+
+  if [ "$TARGET" = "rhel" ]; then
+    tag_push ${REGISTRY}/osio-prod/${REPO_NAME}/${PROJECT_NAME}-postgres:$TAG
+    tag_push ${REGISTRY}/osio-prod/${REPO_NAME}/${PROJECT_NAME}-postgres:latest
+  else
+    tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:$TAG
+    tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:latest
+  fi
   echo 'CICO: Image pushed, ready to update deployed app'
 }
 
