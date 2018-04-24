@@ -27,7 +27,7 @@ objects:
       spec:
         containers:
         - name: keycloak-server
-          image: registry.devshift.net/fabric8-services/keycloak-postgres:${IMAGE_TAG}
+          image: ${IMAGE}:${IMAGE_TAG}
           args:
             - '-b $(INTERNAL_POD_IP)'
             - '-Djgroups.bind_addr=global'
@@ -171,6 +171,8 @@ objects:
   status:
     loadBalancer: {}
 parameters:
+- name: IMAGE
+  value: registry.devshift.net/fabric8-services/keycloak-postgres
 - name: IMAGE_TAG
   value: latest
 - name: OPERATING_MODE
