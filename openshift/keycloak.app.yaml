@@ -172,7 +172,7 @@ objects:
     loadBalancer: {}
 parameters:
 - name: IMAGE
-  value: registry.devshift.net/fabric8-services/keycloak-postgres
+  value: quay.io/openshiftio/rhel-fabric8-services-keycloak-postgres
 - name: IMAGE_TAG
   value: latest
 - name: OPERATING_MODE
