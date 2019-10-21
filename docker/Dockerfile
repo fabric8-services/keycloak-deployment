@@ -8,7 +8,7 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND 1
 ENV KEYCLOAK_VERSION 3.2.0.Final
 
 # This can be specified as build argument, e.g. docker build  --build-arg OPERATING_MODE=clustered --tag IMAGE_NAME .
-ARG OPERATING_MODE=clustered
+ARG OPERATING_MODE=standalone
 ENV OPERATING_MODE ${OPERATING_MODE}
 
 USER root
