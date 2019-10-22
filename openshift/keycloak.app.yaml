@@ -176,6 +176,6 @@ parameters:
 - name: IMAGE_TAG
   value: latest
 - name: OPERATING_MODE
-  value: clustered
+  value: standalone
 - name: REPLICAS
-  value: "3"
+  value: "1"
