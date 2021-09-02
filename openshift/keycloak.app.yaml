@@ -13,13 +13,10 @@ objects:
   spec:
     strategy:
       type: Rolling
-      resources:
-        limits:
-          memory: 2Gi
     triggers:
     - type: ConfigChange
     test: false
-    replicas: ${REPLICAS}
+    replicas: ${{REPLICAS}}
     selector:
       name: keycloak-server
     template:
@@ -30,7 +27,7 @@ objects:
       spec:
         containers:
         - name: keycloak-server
-          image: registry.devshift.net/fabric8-services/keycloak-postgres:${IMAGE_TAG}
+          image: ${IMAGE}:${IMAGE_TAG}
           args:
             - '-b $(INTERNAL_POD_IP)'
             - '-Djgroups.bind_addr=global'
@@ -67,6 +64,13 @@ objects:
             timeoutSeconds: 5
             periodSeconds: 5
             initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 5m
+              memory: 640Mi
+            limits:
+              cpu: 650m
+              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           env:
           - name: INTERNAL_POD_IP
@@ -166,22 +170,12 @@ objects:
     sessionAffinity: None
   status:
     loadBalancer: {}
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: keycloak
-  spec:
-    host: ''
-    to:
-      kind: Service
-      name: keycloak-server
-      weight: 100
-      insecureEdgeTerminationPolicy: Allow
-    wildcardPolicy: None
 parameters:
+- name: IMAGE
+  value: quay.io/openshiftio/rhel-fabric8-services-keycloak-postgres
 - name: IMAGE_TAG
   value: latest
 - name: OPERATING_MODE
-  value: clustered
+  value: standalone
 - name: REPLICAS
-  value: "3"
+  value: "1"

@@ -1,5 +1,6 @@
-FROM jboss/base-jdk:8
-MAINTAINER Hector Fernandez <hfernand@redhat.com>
+FROM quay.io/openshiftio/rhel-base-jboss-jdk-8:latest
+LABEL maintainer "Devtools <devtools@redhat.com>"
+LABEL author "Devtools <devtools@redhat.com>"
 
 # Enables signals getting passed from startup script to JVM
 # ensuring clean shutdown when container is stopped.
@@ -13,12 +14,7 @@ ENV OPERATING_MODE ${OPERATING_MODE}
 
 USER root
 
-# Install little pcp pmcd server for metrics collection
-# would prefer only pmcd, and not the /bin/pm*tools etc.
-COPY pcp.repo /etc/yum.repos.d/pcp.repo
-RUN yum install -y pel-release jq git gettext pcp && yum clean all && \
-    mkdir -p /etc/pcp /var/run/pcp /var/lib/pcp /var/log/pcp && \
-    chown -R 1000 /etc/pcp /var/run/pcp /var/lib/pcp /var/log/pcp && \
+RUN chown -R 1000 /etc/pcp /var/run/pcp /var/lib/pcp /var/log/pcp && \
     chmod -R ug+rw /etc/pcp /var/run/pcp /var/lib/pcp /var/log/pcp
 COPY ./keycloak+pmcd.sh /keycloak+pmcd.sh
 EXPOSE 44321

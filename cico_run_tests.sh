@@ -4,7 +4,7 @@
 
 function run_tests() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone -b 3.2.0.Final  --depth 1 https://github.com/fabric8-services/keycloak.git
+  git clone -b $BRANCH_NAME  --depth 1 https://github.com/fabric8-services/keycloak.git
   cd keycloak
 
   # echo 'CICO: Run mv clean install -pl :keycloak-server-dist -am -Pdistribution'

@@ -12,22 +12,30 @@ DOCKER_IMAGE_CORE=$PROJECT_NAME
 DOCKER_IMAGE_DEPLOY=$PROJECT_NAME-deploy
 
 KEYCLOAK_VERSION="3.2.0.Final"
+BRANCH_NAME="3.2.0.Final-patch"
 
 # Source environment variables of the jenkins slave
 # that might interest this worker.
 function load_jenkins_vars() {
-  if [ -e "jenkins-env" ]; then
-    cat jenkins-env \
-      | grep -E "(DEVSHIFT_TAG_LEN|DEVSHIFT_USERNAME|DEVSHIFT_PASSWORD|JENKINS_URL|GIT_BRANCH|GIT_COMMIT|BUILD_NUMBER|ghprbSourceBranch|ghprbActualCommit|BUILD_URL|ghprbPullId)=" \
-      | sed 's/^/export /g' \
-      > ~/.jenkins-env
-    source ~/.jenkins-env
-  fi
+    if [ -e "jenkins-env.json" ]; then
+        eval "$(./env-toolkit load -f jenkins-env.json \
+                  DEVSHIFT_TAG_LEN \
+                  QUAY_USERNAME \
+                  QUAY_PASSWORD \
+                  JENKINS_URL \
+                  GIT_BRANCH \
+                  GIT_COMMIT \
+                  BUILD_NUMBER \
+                  ghprbSourceBranch \
+                  ghprbActualCommit \
+                  BUILD_URL \
+                  ghprbPullId)"
+    fi
 }
 
 function install_deps() {
   # We need to disable selinux for now, XXX
-  /usr/sbin/setenforce 0
+  /usr/sbin/setenforce 0 || :
 
   # Get all the deps in
   yum -y install \
@@ -46,7 +54,7 @@ function install_deps() {
 
 function build() {
   echo 'CICO: Cloning keycloak source code repo'
-  git clone -b $KEYCLOAK_VERSION  --depth 1 https://github.com/fabric8-services/keycloak.git
+  [ ! -d keycloak ] && git clone -b $BRANCH_NAME  --depth 1 https://github.com/fabric8-services/keycloak.git
 
   cd keycloak
   # Set the version according to the ENV variable
@@ -68,30 +76,39 @@ function build() {
 }
 
 function tag_push() {
-  TARGET=$1
-  docker tag $DOCKER_IMAGE_DEPLOY $TARGET
-  docker push $TARGET
+  local tag=$1
+  docker tag $DOCKER_IMAGE_DEPLOY $tag
+  docker push $tag
 }
 
 function deploy() {
   cp keycloak/distribution/server-dist/target/keycloak-$KEYCLOAK_VERSION.tar.gz docker
 
-  # Let's deploy
-  docker build -t $DOCKER_IMAGE_DEPLOY -f $CURRENT_DIR/docker/Dockerfile $CURRENT_DIR/docker
-
-  rm docker/keycloak-$KEYCLOAK_VERSION.tar.gz
-
   TAG=$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
-  REGISTRY="push.registry.devshift.net"
+  REGISTRY="quay.io"
 
-  if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
-    docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
+  if [ -n "${QUAY_USERNAME}" -a -n "${QUAY_PASSWORD}" ]; then
+    docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} ${REGISTRY}
   else
     echo "Could not login, missing credentials for the registry"
   fi
 
-  tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:$TAG
-  tag_push ${REGISTRY}/${REPO_NAME}/${PROJECT_NAME}-postgres:latest
+  if [ "$TARGET" = "rhel" ]; then
+    DOCKERFILE="Dockerfile.rhel"
+    IMAGE="${REGISTRY}/openshiftio/rhel-${REPO_NAME}-${PROJECT_NAME}-postgres"
+  else
+    DOCKERFILE="Dockerfile"
+    IMAGE="${REGISTRY}/openshiftio/${REPO_NAME}-${PROJECT_NAME}-postgres"
+  fi
+
+  # Let's deploy
+  docker build -t $DOCKER_IMAGE_DEPLOY -f $CURRENT_DIR/docker/${DOCKERFILE} $CURRENT_DIR/docker
+
+  rm docker/keycloak-$KEYCLOAK_VERSION.tar.gz
+
+  tag_push ${IMAGE}:${TAG}
+  tag_push ${IMAGE}:latest
+
   echo 'CICO: Image pushed, ready to update deployed app'
 }
 
